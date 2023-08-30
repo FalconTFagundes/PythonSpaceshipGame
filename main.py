@@ -160,6 +160,9 @@ while rodando: #RODANDO = TRUE
     
     # PARTE QUE IMPRIEME AS IMG
 
+    score = font.render(str(pontos), True, (255, 255, 255))
+    screen.blit(score, (1150, 50))
+
     screen.blit(player, (position_player_x, position_player_y))
     screen.blit(inimigo, (position_inimigo_x, position_inimigo_y))
     screen.blit(missil, (position_missil_x, position_missil_y))
