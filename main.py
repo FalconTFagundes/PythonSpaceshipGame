@@ -22,8 +22,16 @@ missilImg = pygame.image.load('img/missile.png').convert_alpha()
 missil = pygame.transform.scale(missilImg, (25, 25))
 missil = pygame.transform.rotate(missil, -45)
 
-naveInimiga = pygame.image.load('img/spaceship.png').convert_alpha()
-naveInimiga = pygame.transform.scale(naveInimiga, (70, 70))
+inimigo = pygame.image.load('img/spaceship.png').convert_alpha()
+inimigo = pygame.transform.scale(inimigo, (70, 70))
+
+font = pygame.font.SysFont('fonts/PixelGameFont.ttf', 50)
+gameOverFont = pygame.font.SysFont('fonts/PixelGameFont.ttf', 80)
+
+lifeImg = pygame.image.load('img/life.jpg').convert_alpha()
+lifeImg = pygame.transform.scale(lifeImg, (25, 25))
+
+fraseGamerOver = 'Você perdeu vacilão!'
 
 position_player_x = 200
 position_player_y = 300
@@ -35,6 +43,13 @@ position_missil_y = 330
 position_inimigo_x = 1280
 position_inimigo_y = 360
 
+player_rect = player.get_rect()
+inimigo_rect = inimigo.get_rect()
+missil_rect = missil.get_rect()
+
+life = 3
+
+pontos = 0
 
 triggered = False
 
@@ -53,9 +68,49 @@ def respaw_missil():
     velocidade_missil_x = 0
     return [(respaw_missil_x + 30), (respaw_missil_y + 30), triggered, velocidade_missil_x]
 
-   
 
-""" Loop para verificar se o jogo está rodando """
+""" função de colisão """
+def colisaoInimigo():
+    global life
+
+    for i in range(life):
+        screen.blit(lifeImg, (50 + i * 30, 50))
+    
+    if life == 0:
+        gamerOver = gameOverFont.render(fraseGamerOver, True, (255,255,255))
+        screen.blit(gamerOver, (350, 300))
+        return True
+    
+    elif player_rect.colliderect(inimigo_rect) or inimigo_rect.x <= 20:
+        life -=1
+
+        return True
+    else:
+        return False
+    
+def colisaoMissil():
+    global pontos
+    global position_inimigo_x
+    global position_inimigo_y
+    global position_missil_x
+    global position_missil_y
+    global triggered
+    global velocidade_missil_x
+
+    if missil_rect.x == 1300:
+        position_missil_x = respaw_missil()[0]
+        position_missil_y = respaw_missil()[1]
+        triggered = respaw_missil()[2]
+        velocidade_missil_x = respaw_missil()[3]
+
+    if missil_rect.colliderect(inimigo_rect):
+        position_inimigo_x = respaw()[0]
+        position_inimigo_y = respaw()[1]
+
+        pontos +=100
+
+        """ Loop para verificar se o jogo está rodando """
+
 while rodando: #RODANDO = TRUE
     for event in pygame.event.get():
         if event.type == pygame.QUIT:  #Se clicar no botão de fechar, RODANDO recebe FALSE
@@ -84,23 +139,38 @@ while rodando: #RODANDO = TRUE
         triggered = True
         velocidade_missil_x = 2
 
-    if position_inimigo_x <= 10:
+    if position_inimigo_x <= 10 or colisaoInimigo():
         position_inimigo_x = respaw()[0]
         position_inimigo_y = respaw()[1]
 
-    if position_missil_x == 1300:
+    if position_missil_x >= 1300 or colisaoMissil():
         position_missil_x = respaw_missil()[0]
         position_missil_y = respaw_missil()[1]
         triggered = respaw_missil()[2]
         velocidade_missil_x = respaw_missil()[3]
 
 
+    player_rect.x = position_player_x
+    player_rect.y = position_player_y
+
+    missil_rect.x = position_missil_x
+    missil_rect.y = position_missil_y
+    
+    inimigo_rect.x = position_inimigo_x
+    inimigo_rect.y = position_inimigo_y
+
     x -= 1
     position_inimigo_x -= 0.75
     position_missil_x += velocidade_missil_x
     print(position_missil_y)
+
+    """ adicionando desenho da área de contato entre os elementos """
+    pygame.draw.rect(screen, (255, 0, 0), player_rect, 4)
+    pygame.draw.rect(screen, (255, 0, 0), inimigo_rect, 4)
+    pygame.draw.rect(screen, (255, 0, 0), missil_rect, 4)
+
     screen.blit(player, (position_player_x, position_player_y))
-    screen.blit(naveInimiga, (position_inimigo_x, position_inimigo_y))
+    screen.blit(inimigo, (position_inimigo_x, position_inimigo_y))
     screen.blit(missil, (position_missil_x, position_missil_y))
 
     pygame.display.update()
