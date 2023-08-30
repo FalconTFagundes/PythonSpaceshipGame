@@ -56,6 +56,13 @@ triggered = False
 rodando = True #Se tiver como 'True' está funcionando
 
 
+# FUNCS
+
+def gameOver():
+    gamerOver = gameOverFont.render(fraseGamerOver, True, (255,255,255))
+    screen.blit(gamerOver, (350, 300))
+
+
 def respaw():
     x = 1350
     y = random.randint(1, 640)
@@ -72,16 +79,8 @@ def respaw_missil():
 """ função de colisão """
 def colisaoInimigo():
     global life
-
-    for i in range(life):
-        screen.blit(lifeImg, (50 + i * 30, 50))
-    
-    if life == 0:
-        gamerOver = gameOverFont.render(fraseGamerOver, True, (255,255,255))
-        screen.blit(gamerOver, (350, 300))
-        return True
-    
-    elif player_rect.colliderect(inimigo_rect) or inimigo_rect.x <= 20:
+     
+    if player_rect.colliderect(inimigo_rect) or inimigo_rect.x <= 20:
         life -=1
 
         return True
@@ -97,17 +96,14 @@ def colisaoMissil():
     global triggered
     global velocidade_missil_x
 
-    if missil_rect.x == 1300:
-        position_missil_x = respaw_missil()[0]
-        position_missil_y = respaw_missil()[1]
-        triggered = respaw_missil()[2]
-        velocidade_missil_x = respaw_missil()[3]
 
     if missil_rect.colliderect(inimigo_rect):
         position_inimigo_x = respaw()[0]
         position_inimigo_y = respaw()[1]
 
         pontos +=100
+
+        return True
 
         """ Loop para verificar se o jogo está rodando """
 
@@ -139,15 +135,6 @@ while rodando: #RODANDO = TRUE
         triggered = True
         velocidade_missil_x = 2
 
-    if position_inimigo_x <= 10 or colisaoInimigo():
-        position_inimigo_x = respaw()[0]
-        position_inimigo_y = respaw()[1]
-
-    if position_missil_x >= 1300 or colisaoMissil():
-        position_missil_x = respaw_missil()[0]
-        position_missil_y = respaw_missil()[1]
-        triggered = respaw_missil()[2]
-        velocidade_missil_x = respaw_missil()[3]
 
 
     player_rect.x = position_player_x
@@ -169,10 +156,32 @@ while rodando: #RODANDO = TRUE
     pygame.draw.rect(screen, (255, 0, 0), inimigo_rect, 4)
     pygame.draw.rect(screen, (255, 0, 0), missil_rect, 4)
 
+    
+    
+    # PARTE QUE IMPRIEME AS IMG
+
     screen.blit(player, (position_player_x, position_player_y))
     screen.blit(inimigo, (position_inimigo_x, position_inimigo_y))
     screen.blit(missil, (position_missil_x, position_missil_y))
 
+
+    for i in range(life):
+        screen.blit(lifeImg, (50 + i * 30, 50))
+
+
+
+
     pygame.display.update()
+
+    if position_inimigo_x <= 10 or colisaoInimigo():
+        position_inimigo_x = respaw()[0]
+        position_inimigo_y = respaw()[1]
+
+    if position_missil_x >= 1300 or colisaoMissil():
+        position_missil_x = respaw_missil()[0]
+        position_missil_y = respaw_missil()[1]
+        triggered = respaw_missil()[2]
+        velocidade_missil_x = respaw_missil()[3]
+
 
 pygame.quit()    
