@@ -83,7 +83,7 @@ def respaw_missil():
     respaw_missil_x = position_player_x
     respaw_missil_y = position_player_y
     velocidade_missil_x = 0
-    return [(respaw_missil_x + 30), (respaw_missil_y + 30), triggered, velocidade_missil_x]
+    return [(respaw_missil_x + (60)), (respaw_missil_y + 0), triggered, velocidade_missil_x]
 
 
 """ função de colisão """
@@ -135,18 +135,18 @@ while rodando: #RODANDO = TRUE
         tecla = pygame.key.get_pressed()
 
     if tecla[pygame.K_UP] and position_player_y > 1:
-        position_player_y -= 1
+        position_player_y -= 2
         if not triggered:
-            position_missil_y -= 1
+            position_missil_y -= 2
 
     if tecla[pygame.K_DOWN] and position_player_y < 665:
-        position_player_y += 1
+        position_player_y += 2
         if not triggered:
-            position_missil_y += 1
+            position_missil_y += 2
 
     if tecla[pygame.K_SPACE]:
         triggered = True
-        velocidade_missil_x = 2
+        velocidade_missil_x = 4
 
 
 
@@ -173,7 +173,8 @@ while rodando: #RODANDO = TRUE
     pygame.draw.rect(screen, (255,0,0), player_rect, 4)
     pygame.draw.rect(screen, (255,0,0), inimigo_rect, 4)
     pygame.draw.rect(screen, (255,0,0), missil_rect, 4)
- """
+  
+  """
     
     
     # PARTE QUE IMPRIEME AS IMG
