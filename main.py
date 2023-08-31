@@ -38,8 +38,8 @@ lifeImg = pygame.image.load('img/life.jpg').convert_alpha()
 lifeImg = pygame.transform.scale(lifeImg, (25, 25))
 
 boss = pygame.image.load('img/boss.png').convert_alpha()
-boss = pygame.transform.scale(boss, (800, 800))
-boss = pygame.transform.rotate(boss, -50)
+boss = pygame.transform.scale(boss, (700, 700))
+boss = pygame.transform.rotate(boss, -44 )
 
 missilBoss = pygame.image.load('img/missilBoss.png').convert_alpha()
 missilBoss = pygame.transform.scale(missilBoss, (64, 64))
@@ -57,7 +57,7 @@ position_inimigo_x = 1280
 position_inimigo_y = 360
 
 position_boss_x = 750
-position_boss_y = -190
+position_boss_y = -130
 
 velocidade_missil_boss_x = 0
 position_missil_boss_x = 1200
@@ -70,8 +70,15 @@ inimigo_rect = inimigo.get_rect()
 missil_rect = missil.get_rect()
 missil_boss_rect = missilBoss.get_rect()
 
+""" altura e largura do rect do boss """
+boss_rect.width = 300  
+boss_rect.height = 1000
+
+
 """ VARIÁVEIS """
-life = 3
+lifePlayer = 3
+
+lifeBoss = 10
 
 pontos = 0
 
@@ -112,25 +119,29 @@ def ataque_boss():
         position_missil_boss_y = respaw()[1]
 
 
-def colisaoBoss():
-    global life
+def colisaoMissilBoss():
+    global lifePlayer
     global position_missil_boss_x
     global position_missil_boss_y
 
     if player_rect.colliderect(missil_boss_rect): #Verificando Colisão
         position_missil_boss_x = respaw()[0] #Respawnando Missil Boss
         position_missil_boss_y = respaw()[1]
-        life -= 2 #perde 2 de HP
+        lifePlayer -= 2 #perde 2 de HP
         return True
     else:
         return False
 
+
+
+
+
 """ função de colisão """
 def colisaoInimigo():
-    global life
+    global lifePlayer
      
     if player_rect.colliderect(inimigo_rect) or inimigo_rect.x <= 20:
-        life -=1
+        lifePlayer -=1
 
         return True
     else:
@@ -158,6 +169,21 @@ def colisaoMissil():
         pontos +=100
 
         return True
+    
+
+def colisaoBoss():
+    global lifeBoss
+    global position_missil_x
+    global position_missil_y
+
+    if missil_rect.colliderect(boss_rect):
+        position_missil_x = respaw()[0]
+        position_missil_y = respaw()[1]
+        lifeBoss -= 1
+        return True
+    else: 
+        return False
+
 
         """ Loop para verificar se o jogo está rodando """
 
@@ -200,8 +226,8 @@ while rodando: #RODANDO = TRUE
     inimigo_rect.x = position_inimigo_x
     inimigo_rect.y = position_inimigo_y
 
-    boss_rect.x = position_boss_x
-    boss_rect.y = position_boss_y
+    boss_rect.x = 1100
+    boss_rect.y = 10
     
     missil_boss_rect.x = position_missil_boss_x
     missil_boss_rect.y = position_missil_boss_y
@@ -214,12 +240,12 @@ while rodando: #RODANDO = TRUE
 
 
     """ adicionando desenho da área de contato entre os elementos """
- 
     pygame.draw.rect(screen, (255,0,0), boss_rect, 4)
     pygame.draw.rect(screen, (255,0,0), player_rect, 4)
     pygame.draw.rect(screen, (255,0,0), inimigo_rect, 4)
     pygame.draw.rect(screen, (255,0,0), missil_rect, 4)
     pygame.draw.rect(screen, (255,0,0), missil_boss_rect, 4)
+
   
 
     
@@ -246,12 +272,12 @@ while rodando: #RODANDO = TRUE
 
 
         #IMPRIMINDO MISSIL DO BOSS
-        ataque_boss() #Invoco a função dos misseis
-        colisaoBoss() #Faço o teste de colisão
-        
+        ataque_boss() #Invoco a função dos misseis do boss
+        colisaoMissilBoss() #Faço o teste de colisão
+        colisaoBoss()
       
 
-    for i in range(life):
+    for i in range(lifePlayer):
         screen.blit(lifeImg, (50 + i * 30, 50))
     
 
