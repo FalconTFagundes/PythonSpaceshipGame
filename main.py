@@ -31,6 +31,10 @@ gameOverFont = pygame.font.SysFont('fonts/PixelGameFont.ttf', 80)
 lifeImg = pygame.image.load('img/life.jpg').convert_alpha()
 lifeImg = pygame.transform.scale(lifeImg, (25, 25))
 
+boss = pygame.image.load('img/boss.png').convert_alpha()
+boss = pygame.transform.scale(boss, (800, 800))
+boss = pygame.transform.rotate(boss, -50)
+
 fraseGamerOver = 'Você perdeu vacilão!'
 
 position_player_x = 200
@@ -43,10 +47,16 @@ position_missil_y = 330
 position_inimigo_x = 1280
 position_inimigo_y = 360
 
+position_boss_x = 750
+position_boss_y = -190
+
+
+boss_rect = boss.get_rect()
 player_rect = player.get_rect()
 inimigo_rect = inimigo.get_rect()
 missil_rect = missil.get_rect()
 
+""" VARIÁVEIS """
 life = 3
 
 pontos = 0
@@ -87,6 +97,7 @@ def colisaoInimigo():
     else:
         return False
     
+    
 def colisaoMissil():
     global pontos
     global position_inimigo_x
@@ -99,7 +110,9 @@ def colisaoMissil():
 
     if missil_rect.colliderect(inimigo_rect):
         position_inimigo_x = respaw()[0]
-        position_inimigo_y = respaw()[1]
+        position_inimigo_y = respaw()[1]    
+
+        """ PONTUAÇÃO """
 
         pontos +=100
 
@@ -146,6 +159,9 @@ while rodando: #RODANDO = TRUE
     inimigo_rect.x = position_inimigo_x
     inimigo_rect.y = position_inimigo_y
 
+    boss_rect.x = position_boss_x
+    boss_rect.y = position_boss_y
+
     x -= 1
     position_inimigo_x -= 0.75
     position_missil_x += velocidade_missil_x
@@ -155,18 +171,22 @@ while rodando: #RODANDO = TRUE
     pygame.draw.rect(screen, (255, 0, 0), player_rect, 4)
     pygame.draw.rect(screen, (255, 0, 0), inimigo_rect, 4)
     pygame.draw.rect(screen, (255, 0, 0), missil_rect, 4)
+    pygame.draw.rect(screen, (255, 0, 0), boss_rect, 4)
 
     
     
     # PARTE QUE IMPRIEME AS IMG
 
-    score = font.render(str(pontos), True, (255, 255, 255))
-    screen.blit(score, (1150, 50))
+    score = font.render(str(pontos), True, (255, 255, 255)) 
+    screen.blit(score, (1150, 50)) # IMPRIMINDO SCORE
 
-    screen.blit(player, (position_player_x, position_player_y))
+    
+    screen.blit(player, (position_player_x, position_player_y)) 
     screen.blit(inimigo, (position_inimigo_x, position_inimigo_y))
     screen.blit(missil, (position_missil_x, position_missil_y))
-
+    
+    if pontos >= 700: #CONDIÇÃO PARA IMPRIMIR O BOSS NA TELA
+        screen.blit(boss, (position_boss_x, position_boss_y)) #IMPRIMINDO O BOSS NA TELA
 
     for i in range(life):
         screen.blit(lifeImg, (50 + i * 30, 50))
