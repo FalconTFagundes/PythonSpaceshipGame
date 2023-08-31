@@ -35,7 +35,10 @@ boss = pygame.image.load('img/boss.png').convert_alpha()
 boss = pygame.transform.scale(boss, (800, 800))
 boss = pygame.transform.rotate(boss, -50)
 
-fraseGamerOver = 'Você perdeu vacilão!'
+missilBoss = pygame.image.load('img/missilBoss.png').convert_alpha()
+missilBoss = pygame.transform.scale(missilBoss, (64, 64))
+
+fraseGamerOver = 'Você perdeu!'
 
 position_player_x = 200
 position_player_y = 300
@@ -50,11 +53,16 @@ position_inimigo_y = 360
 position_boss_x = 750
 position_boss_y = -190
 
+velocidade_missil_boss_x = 0
+position_missil_boss_x = 1200
+position_missil_boss_y = 320
+
 
 boss_rect = boss.get_rect()
 player_rect = player.get_rect()
 inimigo_rect = inimigo.get_rect()
 missil_rect = missil.get_rect()
+missil_boss_rect = missilBoss.get_rect()
 
 """ VARIÁVEIS """
 life = 3
@@ -85,6 +93,31 @@ def respaw_missil():
     velocidade_missil_x = 0
     return [(respaw_missil_x + (60)), (respaw_missil_y + 0), triggered, velocidade_missil_x]
 
+def ataque_boss():
+    global position_missil_boss_x
+    global position_missil_boss_y
+  
+    position_missil_boss_x -= 12 #velocidade missil do boss
+    screen.blit(missilBoss, (position_missil_boss_x, position_missil_boss_y)) 
+    print(missilBoss)
+
+    if position_missil_boss_x <= 10:
+        position_missil_boss_x = respaw()[0]
+        position_missil_boss_y = respaw()[1]
+
+
+def colisaoBoss():
+    global life
+    global position_missil_boss_x
+    global position_missil_boss_y
+
+    if player_rect.colliderect(missil_boss_rect): #Verificando Colisão
+        position_missil_boss_x = respaw()[0] #Respawnando Missil Boss
+        position_missil_boss_y = respaw()[1]
+        life -= 2 #perde 2 de HP
+        return True
+    else:
+        return False
 
 """ função de colisão """
 def colisaoInimigo():
@@ -96,6 +129,8 @@ def colisaoInimigo():
         return True
     else:
         return False
+    
+    
     
     
 def colisaoMissil():
@@ -126,7 +161,7 @@ while rodando: #RODANDO = TRUE
             rodando = False
 
     screen.blit(bg, (0,0))
-    
+  
     relativo_x = x % bg.get_rect().width
     screen.blit(bg, (relativo_x - bg.get_rect().width, 0))
 
@@ -149,7 +184,7 @@ while rodando: #RODANDO = TRUE
         velocidade_missil_x = 4
 
 
-
+    """ rect recebendo a posição de seu específico elemento """
     player_rect.x = position_player_x
     player_rect.y = position_player_y
 
@@ -161,11 +196,16 @@ while rodando: #RODANDO = TRUE
 
     boss_rect.x = position_boss_x
     boss_rect.y = position_boss_y
+    
+    missil_boss_rect.x = position_missil_boss_x
+    missil_boss_rect.y = position_missil_boss_y
 
     x -= 1
+
     position_inimigo_x -= 0.75
     position_missil_x += velocidade_missil_x
     print(position_missil_y)
+
 
     """ adicionando desenho da área de contato entre os elementos """
  
@@ -173,6 +213,7 @@ while rodando: #RODANDO = TRUE
     pygame.draw.rect(screen, (255,0,0), player_rect, 4)
     pygame.draw.rect(screen, (255,0,0), inimigo_rect, 4)
     pygame.draw.rect(screen, (255,0,0), missil_rect, 4)
+    pygame.draw.rect(screen, (255,0,0), missil_boss_rect, 4)
   
 
     
@@ -187,15 +228,24 @@ while rodando: #RODANDO = TRUE
     screen.blit(inimigo, (position_inimigo_x, position_inimigo_y))
     screen.blit(missil, (position_missil_x, position_missil_y))
     
-    if pontos >= 300: #CONDIÇÃO PARA IMPRIMIR O BOSS NA TELA
-        position_inimigo_x = 1800
-        position_inimigo_y = 1800
-        screen.blit(boss, (position_boss_x, position_boss_y)) #IMPRIMINDO O BOSS NA TELA
+    if pontos >= 100: #CONDIÇÃO PARA IMPRIMIR O BOSS NA TELA
 
+        """ inimigo some da tela "1800" """
+        position_inimigo_x = 1800 
+        position_inimigo_y = 1800
+        
+        #IMPRIMINDO O BOSS NA TELA
+        screen.blit(boss, (position_boss_x, position_boss_y)) 
+
+        #IMPRIMINDO MISSIL DO BOSS
+        ataque_boss() #Invoco a função dos misseis
+        colisaoBoss() #Faço o teste de colisão
+        
+      
 
     for i in range(life):
         screen.blit(lifeImg, (50 + i * 30, 50))
-
+       
 
 
 
@@ -210,6 +260,10 @@ while rodando: #RODANDO = TRUE
         position_missil_y = respaw_missil()[1]
         triggered = respaw_missil()[2]
         velocidade_missil_x = respaw_missil()[3]
+    
+
+ 
+ 
 
 
 pygame.quit()    
