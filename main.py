@@ -3,6 +3,12 @@ import pygame
 
 pygame.init()
 
+pygame.mixer.init()
+pygame.mixer.music.load('musicas/TopGearVegas.mp3')
+pygame.mixer.music.set_volume(0.1)
+pygame.mixer.music.play(-1)
+
+
 """ Altura e largura da janela """
 x = 1280  #Horizontal
 y = 720   #Vertical
@@ -96,7 +102,7 @@ def respaw_missil():
 def ataque_boss():
     global position_missil_boss_x
     global position_missil_boss_y
-  
+
     position_missil_boss_x -= 12 #velocidade missil do boss
     screen.blit(missilBoss, (position_missil_boss_x, position_missil_boss_y)) 
     print(missilBoss)
@@ -234,8 +240,10 @@ while rodando: #RODANDO = TRUE
         position_inimigo_x = 1800 
         position_inimigo_y = 1800
         
+        
         #IMPRIMINDO O BOSS NA TELA
         screen.blit(boss, (position_boss_x, position_boss_y)) 
+
 
         #IMPRIMINDO MISSIL DO BOSS
         ataque_boss() #Invoco a função dos misseis
@@ -245,8 +253,7 @@ while rodando: #RODANDO = TRUE
 
     for i in range(life):
         screen.blit(lifeImg, (50 + i * 30, 50))
-       
-
+    
 
 
     pygame.display.update()
