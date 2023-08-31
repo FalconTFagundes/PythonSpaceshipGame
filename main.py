@@ -14,13 +14,13 @@ pygame.display.set_caption('Meu jogo em python') #Nome janela
 bgImg = pygame.image.load('img/ceuEstrelado.jpg').convert_alpha()
 bg = pygame.transform.scale(bgImg, (x, y))
 
-playerImg = pygame.image.load('img/nave.png').convert_alpha()
+playerImg = pygame.image.load('img/navePixel.png').convert_alpha()
 player = pygame.transform.scale(playerImg, (100, 100))
 player = pygame.transform.rotate(player, -90)
 
-missilImg = pygame.image.load('img/missile.png').convert_alpha()
-missil = pygame.transform.scale(missilImg, (25, 25))
-missil = pygame.transform.rotate(missil, -45)
+missilImg = pygame.image.load('img/bolaDeEnergia.png').convert_alpha()
+missil = pygame.transform.scale(missilImg, (34.375, 34.375))
+""" missil = pygame.transform.rotate(missil, -25) """
 
 inimigo = pygame.image.load('img/spaceship.png').convert_alpha()
 inimigo = pygame.transform.scale(inimigo, (70, 70))
@@ -41,8 +41,8 @@ position_player_x = 200
 position_player_y = 300
 
 velocidade_missil_x = 0
-position_missil_x = 220
-position_missil_y = 330
+position_missil_x = 260
+position_missil_y = 300
 
 position_inimigo_x = 1280
 position_inimigo_y = 360
@@ -168,11 +168,12 @@ while rodando: #RODANDO = TRUE
     print(position_missil_y)
 
     """ adicionando desenho da área de contato entre os elementos """
-    pygame.draw.rect(screen, (255, 0, 0), player_rect, 4)
-    pygame.draw.rect(screen, (255, 0, 0), inimigo_rect, 4)
-    pygame.draw.rect(screen, (255, 0, 0), missil_rect, 4)
-    pygame.draw.rect(screen, (255, 0, 0), boss_rect, 4)
-
+    """
+    pygame.draw.rect(screen, (255,0,0), boss_rect, 4)
+    pygame.draw.rect(screen, (255,0,0), player_rect, 4)
+    pygame.draw.rect(screen, (255,0,0), inimigo_rect, 4)
+    pygame.draw.rect(screen, (255,0,0), missil_rect, 4)
+ """
     
     
     # PARTE QUE IMPRIEME AS IMG
