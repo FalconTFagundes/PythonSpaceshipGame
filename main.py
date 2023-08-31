@@ -3,9 +3,9 @@ import pygame
 
 pygame.init()
 
-""" Altura e largura da tela """
-x = 1280
-y = 720
+""" Altura e largura da janela """
+x = 1280  #Horizontal
+y = 720   #Vertical
 
 
 screen = pygame.display.set_mode((x,y)) #Setando minha altura e largura na janela 
@@ -168,13 +168,13 @@ while rodando: #RODANDO = TRUE
     print(position_missil_y)
 
     """ adicionando desenho da área de contato entre os elementos """
-    """
+ 
     pygame.draw.rect(screen, (255,0,0), boss_rect, 4)
     pygame.draw.rect(screen, (255,0,0), player_rect, 4)
     pygame.draw.rect(screen, (255,0,0), inimigo_rect, 4)
     pygame.draw.rect(screen, (255,0,0), missil_rect, 4)
   
-  """
+
     
     
     # PARTE QUE IMPRIEME AS IMG
@@ -187,8 +187,11 @@ while rodando: #RODANDO = TRUE
     screen.blit(inimigo, (position_inimigo_x, position_inimigo_y))
     screen.blit(missil, (position_missil_x, position_missil_y))
     
-    if pontos >= 700: #CONDIÇÃO PARA IMPRIMIR O BOSS NA TELA
+    if pontos >= 300: #CONDIÇÃO PARA IMPRIMIR O BOSS NA TELA
+        position_inimigo_x = 1800
+        position_inimigo_y = 1800
         screen.blit(boss, (position_boss_x, position_boss_y)) #IMPRIMINDO O BOSS NA TELA
+
 
     for i in range(life):
         screen.blit(lifeImg, (50 + i * 30, 50))
