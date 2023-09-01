@@ -285,7 +285,7 @@ while rodando: #RODANDO = TRUE
         ataque_boss() #Invoco a função dos misseis do boss
         colisaoMissilBoss() #Faço o teste de colisão
         colisaoBoss()
-        if lifeBoss == 0:
+        if lifeBoss == 9:
             victory()
             position_boss_x = 1880
             position_boss_y = 1880            
