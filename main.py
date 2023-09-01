@@ -31,8 +31,8 @@ missil = pygame.transform.scale(missilImg, (34.375, 34.375))
 inimigo = pygame.image.load('img/spaceship.png').convert_alpha()
 inimigo = pygame.transform.scale(inimigo, (70, 70))
 
-font = pygame.font.SysFont('fonts/PixelGameFont.ttf', 50)
-gameOverFont = pygame.font.SysFont('fonts/PixelGameFont.ttf', 80)
+font = pygame.font.Font('fonts/PixelGameFont.ttf', 50)
+gameOverFont = pygame.font.Font('fonts/PixelGameFont.ttf', 80)
 
 lifeImg = pygame.image.load('img/life.jpg').convert_alpha()
 lifeImg = pygame.transform.scale(lifeImg, (25, 25))
@@ -45,6 +45,8 @@ missilBoss = pygame.image.load('img/missilBoss.png').convert_alpha()
 missilBoss = pygame.transform.scale(missilBoss, (64, 64))
 
 fraseGamerOver = 'Você perdeu!'
+fraseSuccess = 'Parabéns, você venceu!'
+
 
 position_player_x = 200
 position_player_y = 300
@@ -80,6 +82,8 @@ lifePlayer = 3
 
 lifeBoss = 10
 
+contadorBoss = 0
+
 pontos = 0
 
 triggered = False
@@ -89,9 +93,15 @@ rodando = True #Se tiver como 'True' está funcionando
 
 # FUNCS
 
+
+
 def gameOver():
     gamerOver = gameOverFont.render(fraseGamerOver, True, (255,255,255))
     screen.blit(gamerOver, (350, 300))
+
+def victory():
+    victory = gameOverFont.render(fraseSuccess, True, (255,255,255))
+    screen.blit(victory, (350, 300))
 
 
 def respaw():
@@ -175,6 +185,8 @@ def colisaoBoss():
     global lifeBoss
     global position_missil_x
     global position_missil_y
+    global position_boss_y
+    global position_boss_x 
 
     if missil_rect.colliderect(boss_rect):
         position_missil_x = respaw()[0]
@@ -265,22 +277,35 @@ while rodando: #RODANDO = TRUE
         """ inimigo some da tela "1800" """
         position_inimigo_x = 1800 
         position_inimigo_y = 1800
-        
+    
         
         #IMPRIMINDO O BOSS NA TELA
         screen.blit(boss, (position_boss_x, position_boss_y)) 
-
-
-        #IMPRIMINDO MISSIL DO BOSS
+ #IMPRIMINDO MISSIL DO BOSS
         ataque_boss() #Invoco a função dos misseis do boss
         colisaoMissilBoss() #Faço o teste de colisão
         colisaoBoss()
+        if lifeBoss == 0:
+            victory()
+            position_boss_x = 1880
+            position_boss_y = 1880            
+            position_missil_boss_y = 1880
+            position_missil_boss_x = 1880
+            position_missil_x = 1880
+            position_missil_y = 1800
+            
+    if lifePlayer <= 0:
+        gameOver()  
+        position_missil_x = 1880
+        position_missil_y = 1800
+        position_player_x = 1880
+        position_player_y = 1880
+    
       
 
     for i in range(lifePlayer):
         screen.blit(lifeImg, (50 + i * 30, 50))
-    
-
+       
 
     pygame.display.update()
 
@@ -293,7 +318,8 @@ while rodando: #RODANDO = TRUE
         position_missil_y = respaw_missil()[1]
         triggered = respaw_missil()[2]
         velocidade_missil_x = respaw_missil()[3]
-    
+
+
 
  
  
