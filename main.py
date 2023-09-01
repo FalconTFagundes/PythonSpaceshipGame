@@ -74,11 +74,11 @@ missil_boss_rect = missilBoss.get_rect()
 
 """ altura e largura do rect do boss """
 boss_rect.width = 300  
-boss_rect.height = 1000
+boss_rect.height = 400
 
 
 """ VARIÁVEIS """
-lifePlayer = 3
+lifePlayer = 5
 
 lifeBoss = 10
 
@@ -239,28 +239,26 @@ while rodando: #RODANDO = TRUE
     inimigo_rect.y = position_inimigo_y
 
     boss_rect.x = 1100
-    boss_rect.y = 10
+    boss_rect.y = 180
     
     missil_boss_rect.x = position_missil_boss_x
     missil_boss_rect.y = position_missil_boss_y
 
     x -= 1
 
-    position_inimigo_x -= 0.75
+    position_inimigo_x -= 3
     position_missil_x += velocidade_missil_x
     print(position_missil_y)
 
 
     """ adicionando desenho da área de contato entre os elementos """
-    pygame.draw.rect(screen, (255,0,0), boss_rect, 4)
+    """ pygame.draw.rect(screen, (255,0,0), boss_rect, 4)
     pygame.draw.rect(screen, (255,0,0), player_rect, 4)
     pygame.draw.rect(screen, (255,0,0), inimigo_rect, 4)
     pygame.draw.rect(screen, (255,0,0), missil_rect, 4)
-    pygame.draw.rect(screen, (255,0,0), missil_boss_rect, 4)
-
+    pygame.draw.rect(screen, (255,0,0), missil_boss_rect, 4) """
   
-
-    
+  
     
     # PARTE QUE IMPRIEME AS IMG
 
@@ -272,7 +270,7 @@ while rodando: #RODANDO = TRUE
     screen.blit(inimigo, (position_inimigo_x, position_inimigo_y))
     screen.blit(missil, (position_missil_x, position_missil_y))
     
-    if pontos >= 100: #CONDIÇÃO PARA IMPRIMIR O BOSS NA TELA
+    if pontos >= 2600: #CONDIÇÃO PARA IMPRIMIR O BOSS NA TELA
 
         """ inimigo some da tela "1800" """
         position_inimigo_x = 1800 
@@ -285,7 +283,7 @@ while rodando: #RODANDO = TRUE
         ataque_boss() #Invoco a função dos misseis do boss
         colisaoMissilBoss() #Faço o teste de colisão
         colisaoBoss()
-        if lifeBoss == 9:
+        if lifeBoss == 0:
             victory()
             position_boss_x = 1880
             position_boss_y = 1880            
